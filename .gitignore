@@ -12,10 +12,23 @@ dist/
 *.pth
 *.pt
 *.onnx
+*.tar.gz
+*.zip
+backend/ml_models/deployment_package/
+backend/ml_models/*.tar.gz
 
 # IDE
 .vscode/
 .idea/
 
-# Claude Code
+# Docker
+.dockerignore
+
+# Test files
+backend/venv/
+backend/test_models_quick.py
+backend/app/models/test image/
+
+# Claude Code files
 CLAUDE.md
+INTEGRATION_SUMMARY.md

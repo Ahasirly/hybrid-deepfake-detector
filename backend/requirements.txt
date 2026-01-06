@@ -3,11 +3,16 @@ fastapi==0.104.1
 uvicorn[standard]==0.24.0
 python-multipart==0.0.6
 
-# ML/DL
+# ML/DL - Core
 torch>=2.0.0
 torchvision>=0.15.0
 Pillow>=10.0.0
 numpy>=1.24.0
+
+# ML/DL - Model Dependencies
+efficientnet-pytorch==0.7.1  # For SBI model
+timm>=0.9.0                  # For DistilDIRE ConvNeXt backbone
+huggingface-hub>=0.16.0      # For CLIP-LAION2B weights
 
 # OpenAI
 openai>=1.3.0

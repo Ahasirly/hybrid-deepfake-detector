@@ -14,7 +14,7 @@ function App() {
             Hybrid Deepfake Detector
           </h1>
           <p className="text-xl text-gray-700">
-            Advanced AI-powered deepfake detection using SBI, DistilDIRE, and ChatGPT Vision
+            Deepfake detection using SBI, DistilDIRE, and ChatGPT Vision
           </p>
         </header>
 
@@ -29,7 +29,7 @@ function App() {
         </div>
 
         <footer className="text-center mt-8 text-gray-600">
-          <p>Powered by SBI, DistilDIRE, and ChatGPT Vision models</p>
+          <p>Using SBI, DistilDIRE, and ChatGPT Vision models</p>
         </footer>
       </div>
     </div>
