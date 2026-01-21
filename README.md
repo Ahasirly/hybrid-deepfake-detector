@@ -12,7 +12,6 @@ A web-based deepfake detection system using a hybrid ensemble approach combining
 - **DistilDIRE Model**: ConvNeXt-base with CLIP-LAION2B pretraining (AP 96.11%)
 - **Ensemble Fusion**: Weighted combination with adaptive strategy based on active models
 - **Docker Deployment**: Full containerized deployment with docker-compose
-- **AWS Deployment Guide**: Comprehensive guide for EC2, ECS, and SageMaker deployment
 
 ### Model Availability
 Models run in "placeholder" mode if weight files are not present. Download model weights to enable full functionality:
@@ -49,8 +48,7 @@ Models run in "placeholder" mode if weight files are not present. Download model
 │   ├── package.json
 │   ├── Dockerfile
 │   └── vite.config.js
-├── docker-compose.yml          # Container orchestration
-└── AWS_DEPLOYMENT.md           # AWS deployment guide
+└── docker-compose.yml          # Container orchestration
 ```
 
 ## Models
@@ -186,7 +184,6 @@ Frontend runs at: http://localhost:3000
 
 **Deployment:**
 - Docker + Docker Compose
-- AWS EC2/ECS/SageMaker (see `AWS_DEPLOYMENT.md`)
 
 ## GPU Support
 

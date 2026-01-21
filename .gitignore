@@ -32,3 +32,4 @@ backend/app/models/test image/
 # Claude Code files
 CLAUDE.md
 INTEGRATION_SUMMARY.md
+workflow.md
