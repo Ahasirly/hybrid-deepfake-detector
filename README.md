@@ -200,49 +200,20 @@ Models auto-detect CUDA availability. For GPU inference:
 
 ## Model Weights
 
-Fine-tuned model weights download:
+Download: [Google Drive](TODO)
 
-| Model | Download Link | Size |
-|-------|---------------|------|
-| SBI (exp003_best_model.pth) | [TODO] | ~65MB |
-| SBI backbone (adv-efficientnet-b4) | [TODO] | ~75MB |
-| DistilDIRE (v2_best_model.pth) | [TODO] | ~350MB |
+Extract `deployment_package.tar.gz` to `backend/ml_models/`
 
-Place downloaded weights in:
-```
-backend/ml_models/deployment_package/models/
-├── sbi/
-│   ├── exp003_best_model.pth
-│   └── adv-efficientnet-b4-44fb3a87.pth
-└── distildire/
-    └── v2_best_model.pth
-```
-
-## References
-
-### Papers
-
-- **SBI (Self-Blended Images)**: Shiohara & Yamasaki, "Detecting Deepfakes with Self-Blended Images" (CVPR 2022)
-- **DIRE**: Wang et al., "DIRE for Diffusion-Generated Image Detection" (ICCV 2023)
-- **Swappir**: Sumsub, "Evaluating Deepfake Detectors in the Wild" (arXiv:2507.21905)
+## Credits
 
 ### Datasets
-
-[Swappir Dataset](https://huggingface.co/datasets/Sumsub/Swappir) by Sumsub:
-- LFW (Labeled Faces in the Wild)
-- CelebA-HQ
-- FairFace
-
-Additional dataset:
-- [FFHQ (Flickr-Faces-HQ)](https://github.com/NVlabs/ffhq-dataset)
-
-Face-swap generation:
+- [Swappir Dataset](https://huggingface.co/datasets/Sumsub/Swappir) - LFW, CelebA-HQ, FairFace
+- [FFHQ](https://github.com/NVlabs/ffhq-dataset)
 - [SimSwap](https://github.com/neuralchen/SimSwap)
-- [Roop/Inswapper](https://github.com/s0md3v/roop)
+- [Roop](https://github.com/s0md3v/roop)
 
 ### Code & Pretrained Models
-
 - [EfficientNet-PyTorch](https://github.com/lukemelas/EfficientNet-PyTorch)
 - [RetinaFace](https://github.com/ternaus/retinaface)
-- [timm (PyTorch Image Models)](https://github.com/huggingface/pytorch-image-models)
-- [OpenAI GPT-4o](https://platform.openai.com/)
+- [timm](https://github.com/huggingface/pytorch-image-models)
+- [OpenAI API](https://platform.openai.com/)
