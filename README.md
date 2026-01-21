@@ -50,8 +50,7 @@ Models run in "placeholder" mode if weight files are not present. Download model
 │   ├── Dockerfile
 │   └── vite.config.js
 ├── docker-compose.yml          # Container orchestration
-├── AWS_DEPLOYMENT.md           # AWS deployment guide
-└── CLAUDE.md                   # Development documentation
+└── AWS_DEPLOYMENT.md           # AWS deployment guide
 ```
 
 ## Models
