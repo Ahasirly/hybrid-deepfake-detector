@@ -201,3 +201,49 @@ Models auto-detect CUDA availability. For GPU inference:
 2. Add result visualization (heatmaps, artifact highlighting)
 3. Production deployment with proper CORS configuration
 4. Performance optimization and caching
+
+## Model Weights
+
+Fine-tuned model weights download:
+
+| Model | Download Link | Size |
+|-------|---------------|------|
+| SBI (exp003_best_model.pth) | [TODO] | ~65MB |
+| SBI backbone (adv-efficientnet-b4) | [TODO] | ~75MB |
+| DistilDIRE (v2_best_model.pth) | [TODO] | ~350MB |
+
+Place downloaded weights in:
+```
+backend/ml_models/deployment_package/models/
+├── sbi/
+│   ├── exp003_best_model.pth
+│   └── adv-efficientnet-b4-44fb3a87.pth
+└── distildire/
+    └── v2_best_model.pth
+```
+
+## References
+
+### Papers
+
+- **SBI (Self-Blended Images)**: Shiohara & Yamasaki, "Detecting Deepfakes with Self-Blended Images" (CVPR 2022)
+- **DIRE**: Wang et al., "DIRE for Diffusion-Generated Image Detection" (ICCV 2023)
+- **Detectors in the Wild**: Coccomini et al., "Detecting Deepfakes in the Wild" (2024)
+
+### Datasets
+
+Training data from [HuggingFace Swappir](https://huggingface.co/Swappir):
+- FFHQ (Flickr-Faces-HQ)
+- LFW (Labeled Faces in the Wild)
+- CelebA-HQ
+
+Face-swap generation:
+- [SimSwap](https://github.com/neuralchen/SimSwap)
+- [Roop/Inswapper](https://github.com/s0md3v/roop)
+
+### Code & Pretrained Models
+
+- [EfficientNet-PyTorch](https://github.com/lukemelas/EfficientNet-PyTorch)
+- [RetinaFace](https://github.com/ternaus/retinaface)
+- [timm (PyTorch Image Models)](https://github.com/huggingface/pytorch-image-models)
+- [OpenAI GPT-4o](https://platform.openai.com/)
