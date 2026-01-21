@@ -228,14 +228,17 @@ backend/ml_models/deployment_package/models/
 
 - **SBI (Self-Blended Images)**: Shiohara & Yamasaki, "Detecting Deepfakes with Self-Blended Images" (CVPR 2022)
 - **DIRE**: Wang et al., "DIRE for Diffusion-Generated Image Detection" (ICCV 2023)
-- **Detectors in the Wild**: Coccomini et al., "Detecting Deepfakes in the Wild" (2024)
+- **Swappir**: Sumsub, "Evaluating Deepfake Detectors in the Wild" (arXiv:2507.21905)
 
 ### Datasets
 
-Training data from [HuggingFace Swappir](https://huggingface.co/Swappir):
-- FFHQ (Flickr-Faces-HQ)
+[Swappir Dataset](https://huggingface.co/datasets/Sumsub/Swappir) by Sumsub:
 - LFW (Labeled Faces in the Wild)
 - CelebA-HQ
+- FairFace
+
+Additional dataset:
+- [FFHQ (Flickr-Faces-HQ)](https://github.com/NVlabs/ffhq-dataset)
 
 Face-swap generation:
 - [SimSwap](https://github.com/neuralchen/SimSwap)
