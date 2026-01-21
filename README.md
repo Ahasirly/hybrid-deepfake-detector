@@ -191,16 +191,9 @@ Models auto-detect CUDA availability. For GPU inference:
 - Local: Install PyTorch with CUDA support
 - AWS: Use g4dn.xlarge or similar GPU instances
 
-## Next Steps
-
-1. Download and deploy model weight files
-2. Add result visualization (heatmaps, artifact highlighting)
-3. Production deployment with proper CORS configuration
-4. Performance optimization and caching
-
 ## Model Weights
 
-Download: [Google Drive](TODO)
+Download: [Google Drive](https://drive.google.com/file/d/17pou72RyAecPwZWBgw9syrDiP1C0dyXH/view?usp=sharing)
 
 Extract `deployment_package.tar.gz` to `backend/ml_models/`
 
@@ -209,11 +202,13 @@ Extract `deployment_package.tar.gz` to `backend/ml_models/`
 ### Datasets
 - [Swappir Dataset](https://huggingface.co/datasets/Sumsub/Swappir) - LFW, CelebA-HQ, FairFace
 - [FFHQ](https://github.com/NVlabs/ffhq-dataset)
+- [Deepfake-Eval-2024](https://huggingface.co/datasets/nuriachandra/Deepfake-Eval-2024)
 - [SimSwap](https://github.com/neuralchen/SimSwap)
 - [Roop](https://github.com/s0md3v/roop)
 
 ### Code & Pretrained Models
 - [EfficientNet-PyTorch](https://github.com/lukemelas/EfficientNet-PyTorch)
 - [RetinaFace](https://github.com/ternaus/retinaface)
+- [ConvNeXt](https://github.com/facebookresearch/ConvNeXt)
 - [timm](https://github.com/huggingface/pytorch-image-models)
 - [OpenAI API](https://platform.openai.com/)
