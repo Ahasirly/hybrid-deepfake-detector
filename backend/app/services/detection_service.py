@@ -55,7 +55,10 @@ class DetectionService:
             image_bytes: Image file bytes
 
         Returns:
-            dict: Detection results with confidence scores
+            dict: Detection results with deepfake confidence scores
+                - is_fake: True if detected as deepfake, False if real
+                - confidence: Deepfake probability (0.0 = definitely real, 1.0 = definitely fake)
+                - Each model returns (is_fake, deepfake_confidence)
         """
 
         # 1. SBI Model
@@ -94,15 +97,16 @@ class DetectionService:
             chatgpt_status = "error"
 
         # 4. Ensemble fusion strategy
+        # All confidence values represent deepfake_confidence (probability of being fake)
         # Count how many models are active
         active_models = sum([self.use_sbi, self.use_distildire, True])  # ChatGPT always active
 
         if active_models == 3:
             # All three models active - weighted ensemble
-            # SBI: 30% (fast screening)
-            # DistilDIRE: 35% (high accuracy)
-            # ChatGPT: 35% (VLM reasoning)
-            final_confidence = (
+            # SBI: 30% weight (fast screening)
+            # DistilDIRE: 35% weight (high accuracy)
+            # ChatGPT: 35% weight (VLM reasoning)
+            final_deepfake_confidence = (
                 0.30 * sbi_confidence +
                 0.35 * distildire_confidence +
                 0.35 * chatgpt_confidence
@@ -110,23 +114,23 @@ class DetectionService:
         elif active_models == 2:
             if self.use_sbi and self.use_distildire:
                 # SBI + DistilDIRE (no ChatGPT)
-                final_confidence = 0.4 * sbi_confidence + 0.6 * distildire_confidence
+                final_deepfake_confidence = 0.4 * sbi_confidence + 0.6 * distildire_confidence
             elif self.use_sbi:
                 # SBI + ChatGPT (no DistilDIRE)
-                final_confidence = 0.4 * sbi_confidence + 0.6 * chatgpt_confidence
+                final_deepfake_confidence = 0.4 * sbi_confidence + 0.6 * chatgpt_confidence
             else:
                 # DistilDIRE + ChatGPT (no SBI)
-                final_confidence = 0.5 * distildire_confidence + 0.5 * chatgpt_confidence
+                final_deepfake_confidence = 0.5 * distildire_confidence + 0.5 * chatgpt_confidence
         else:
             # Only ChatGPT active
-            final_confidence = chatgpt_confidence
+            final_deepfake_confidence = chatgpt_confidence
 
-        # Final decision
-        is_fake = final_confidence > 0.5
+        # Final decision: threshold at 0.5
+        is_fake = final_deepfake_confidence > 0.5
 
         return {
             "is_fake": is_fake,
-            "confidence": final_confidence,
+            "confidence": final_deepfake_confidence,  # Deepfake probability (0.0=real, 1.0=fake)
             "ensemble_mode": f"{active_models}_models_active",
             "models": {
                 "sbi": {

@@ -15,7 +15,9 @@ class ChatGPTVision:
             image_bytes: Image bytes
 
         Returns:
-            tuple[bool, float]: (is_fake, confidence)
+            tuple[bool, float]: (is_fake, deepfake_confidence)
+                - is_fake: True if detected as deepfake, False if real
+                - deepfake_confidence: Probability of being fake (0.0-1.0)
         """
         # Convert bytes to base64
         image_base64 = base64.b64encode(image_bytes).decode('utf-8')
@@ -33,7 +35,7 @@ class ChatGPTVision:
                                 "text": """You are an expert at detecting AI-generated or manipulated images (deepfakes).
 
 Analyze this image carefully and determine if it appears to be:
-1. An authentic, unmodified photograph
+1. A real, unmodified photograph
 2. An AI-generated or deepfake image
 
 Look for signs such as:
@@ -48,7 +50,7 @@ Respond ONLY with a JSON object in this exact format:
 {"is_fake": true/false, "confidence": 0.0-1.0, "reasoning": "brief explanation"}
 
 Where:
-- is_fake: true if you believe it's AI-generated/deepfake, false if authentic
+- is_fake: true if you believe it's AI-generated/deepfake, false if real
 - confidence: your confidence level (0.0 = not confident, 1.0 = very confident)
 - reasoning: brief explanation of your decision"""
                             },
@@ -77,7 +79,24 @@ Where:
 
             result = json.loads(result_text)
 
-            return result.get("is_fake", False), result.get("confidence", 0.0)
+            # Convert GPT's confidence to deepfake_confidence (probability of being fake)
+            # If is_fake=True, confidence=0.9 means "90% sure it's fake" → deepfake_confidence = 0.9
+            # If is_fake=False, confidence=0.9 means "90% sure it's real" → deepfake_confidence = 0.1
+            is_fake_raw = result.get("is_fake", False)
+            confidence_raw = result.get("confidence", 0.0)
+
+            if is_fake_raw:
+                # GPT says it's fake: confidence directly represents deepfake probability
+                deepfake_confidence = confidence_raw
+            else:
+                # GPT says it's real: confidence represents real probability
+                # Convert to deepfake probability: deepfake_confidence = 1 - real_confidence
+                deepfake_confidence = 1.0 - confidence_raw
+
+            # Determine final is_fake based on deepfake_confidence
+            is_fake_final = deepfake_confidence > 0.5
+
+            return is_fake_final, deepfake_confidence
 
         except Exception as e:
             print(f"[ERROR] ChatGPT Vision error: {type(e).__name__}: {str(e)}")

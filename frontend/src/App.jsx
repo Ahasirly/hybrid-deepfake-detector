@@ -29,7 +29,7 @@ function App() {
         </div>
 
         <footer className="text-center mt-8 text-gray-600">
-          <p>Using SBI, DistilDIRE, and ChatGPT Vision models</p>
+          <p>Using SBI, DistilDIRE, and ChatGPT Vision models <br /> (*Model can make mistakes)</p>
         </footer>
       </div>
     </div>

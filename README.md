@@ -1,100 +1,123 @@
 # Hybrid Deepfake Detection System
 
-A web-based deepfake detection system using a hybrid approach combining three AI models: SBI, DistilDIRE, and ChatGPT Vision API.
+A web-based deepfake detection system using a hybrid ensemble approach combining three AI models: SBI (Self-Blended Images), DistilDIRE, and ChatGPT Vision API.
 
 ## Project Status
 
-### ✅ Implemented
+### Implemented
 - **Frontend**: React + Vite + Tailwind CSS (black & white minimalist design)
 - **Backend API**: FastAPI with `/api/v1/detect` endpoint
 - **ChatGPT Vision**: Fully functional deepfake detection using GPT-4o
-- **Image Upload**: Drag & drop interface with preview
-- **Results Display**: Confidence scores and model-specific results
+- **SBI Model**: EfficientNet-B4 fine-tuned on FFHQ + LFW + CelebA-HQ (AUC 98.73%)
+- **DistilDIRE Model**: ConvNeXt-base with CLIP-LAION2B pretraining (AP 96.11%)
+- **Ensemble Fusion**: Weighted combination with adaptive strategy based on active models
+- **Docker Deployment**: Full containerized deployment with docker-compose
+- **AWS Deployment Guide**: Comprehensive guide for EC2, ECS, and SageMaker deployment
 
-### 🚧 In Progress
-- **SBI Model**: Placeholder (to be deployed on AWS)
-- **DistilDIRE Model**: Placeholder (to be deployed on AWS)
+### Model Availability
+Models run in "placeholder" mode if weight files are not present. Download model weights to enable full functionality:
+- SBI: `backend/ml_models/deployment_package/models/sbi/`
+- DistilDIRE: `backend/ml_models/deployment_package/models/distildire/`
 
 ## Project Architecture
 
 ```
-├── backend/                 # FastAPI Backend
+├── backend/                     # FastAPI Backend
 │   ├── app/
-│   │   ├── api/v1/         # API Routes
-│   │   │   └── endpoints/  # Detection endpoint
-│   │   ├── models/         # ML Model Loaders
+│   │   ├── api/v1/endpoints/   # Detection endpoint
+│   │   ├── models/             # ML Model Loaders
 │   │   │   ├── sbi_model.py
 │   │   │   ├── distildire_model.py
 │   │   │   └── chatgpt_vision.py
-│   │   ├── services/       # Detection orchestration
-│   │   └── core/           # Configuration
-│   ├── ml_models/          # Fine-tuned Model Files
+│   │   ├── services/           # Detection orchestration
+│   │   ├── ml_inference/       # Model architectures
+│   │   │   ├── sbi/           # SBI detector architecture
+│   │   │   └── improved_model.py  # DistilDIRE v2
+│   │   └── core/               # Configuration
+│   ├── ml_models/              # Model weight files
+│   │   └── deployment_package/models/
+│   │       ├── sbi/           # SBI weights
+│   │       └── distildire/    # DistilDIRE weights
 │   ├── requirements.txt
-│   └── .env               # Environment variables
-├── frontend/               # React Frontend
+│   ├── Dockerfile
+│   └── .env
+├── frontend/                   # React Frontend
 │   ├── src/
-│   │   ├── components/     # ImageUploader, ResultDisplay
-│   │   ├── services/       # API client
-│   │   ├── App.jsx
-│   │   └── main.jsx
+│   │   ├── components/        # ImageUploader, ResultDisplay
+│   │   ├── services/          # API client
+│   │   └── App.jsx
 │   ├── package.json
+│   ├── Dockerfile
 │   └── vite.config.js
-└── CLAUDE.md              # AI assistant documentation
+├── docker-compose.yml          # Container orchestration
+├── AWS_DEPLOYMENT.md           # AWS deployment guide
+└── CLAUDE.md                   # Development documentation
 ```
 
 ## Models
 
-1. **SBI (Self-Blended Images)** - Fine-tuned model for detecting self-blended artifacts
-2. **DistilDIRE** - Distilled Diffusion Reconstruction Error model
-3. **ChatGPT Vision (GPT-4o)** - VLM-based verification layer ✅ Active
+| Model | Architecture | Input Size | Performance |
+|-------|-------------|------------|-------------|
+| **SBI** | EfficientNet-B4 | 380×380 | AUC 98.73%, Acc 94.83% |
+| **DistilDIRE v2** | ConvNeXt-base + CLIP | 224×224 | Acc 86.89%, AP 96.11% |
+| **ChatGPT Vision** | GPT-4o | Auto | VLM reasoning |
+
+### Ensemble Fusion Strategy
+
+The system adapts based on available models:
+
+- **3 Models Active**: SBI (30%) + DistilDIRE (35%) + ChatGPT (35%)
+- **2 Models Active**: Weighted split based on model pair
+- **1 Model Active**: Single model at 100%
+
+Final decision threshold: confidence > 0.5 indicates deepfake
 
 ## Setup
 
-### Prerequisites
+### Quick Start with Docker (Recommended)
+
+```bash
+# Clone and configure
+git clone <repo-url>
+cd hybrid-deepfake-detector
+
+# Set your OpenAI API key
+echo "OPENAI_API_KEY=your_key_here" > backend/.env
+
+# Build and run
+docker-compose up -d --build
+```
+
+Access:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
+
+### Manual Setup
+
+#### Prerequisites
 - Python 3.11+
 - Node.js 16+
 - OpenAI API Key
 
-### Backend Setup
+#### Backend
 
-1. Install dependencies:
 ```bash
 cd backend
 pip install -r requirements.txt
+cp .env.example .env  # Add your OPENAI_API_KEY
+uvicorn app.main:app --reload --port 8000
 ```
 
-2. Create `.env` file:
-```bash
-cp .env.example .env
-```
+#### Frontend
 
-3. Add your OpenAI API key to `.env`:
-```
-OPENAI_API_KEY=your_key_here
-```
-
-4. Start the server:
-```bash
-uvicorn app.main:app --reload
-```
-
-Backend runs at: **http://localhost:8000**
-API docs: **http://localhost:8000/docs**
-
-### Frontend Setup
-
-1. Install dependencies:
 ```bash
 cd frontend
 npm install
-```
-
-2. Start development server:
-```bash
 npm run dev
 ```
 
-Frontend runs at: **http://localhost:3000**
+Frontend runs at: http://localhost:3000
 
 ## Usage
 
@@ -116,22 +139,24 @@ Frontend runs at: **http://localhost:3000**
 **POST** `/api/v1/detect`
 
 - **Input**: Image file (PNG, JPG, JPEG, WEBP, max 20MB)
-- **Processing**: Automatically compressed to ~5MB for optimal API performance
-- **Output**:
+- **Processing**: Auto-compressed to ~5MB for optimal API performance
+
+**Response:**
 ```json
 {
   "is_fake": false,
   "confidence": 0.85,
+  "ensemble_mode": "3_models_active",
   "models": {
     "sbi": {
       "is_fake": false,
-      "confidence": 0.5,
-      "status": "placeholder"
+      "confidence": 0.82,
+      "status": "active"
     },
     "distildire": {
       "is_fake": false,
-      "confidence": 0.5,
-      "status": "placeholder"
+      "confidence": 0.88,
+      "status": "active"
     },
     "chatgpt": {
       "is_fake": false,
@@ -142,30 +167,37 @@ Frontend runs at: **http://localhost:3000**
 }
 ```
 
+**Status Values:** `active`, `placeholder`, `error`
+
+**Confidence Interpretation:** 0.0 = definitely real, 1.0 = definitely fake
+
 ## Tech Stack
 
-**Frontend**:
-- React 19
-- Vite 7
+**Frontend:**
+- React 19 + Vite 7
 - Tailwind CSS 3
-- Axios
-- React Dropzone
+- Axios + React Dropzone
 
-**Backend**:
-- FastAPI
-- PyTorch
+**Backend:**
+- FastAPI + Uvicorn
+- PyTorch (CPU/GPU)
 - OpenAI Python SDK
-- Pydantic
+- EfficientNet-PyTorch (SBI)
+- timm + huggingface-hub (DistilDIRE)
 
-**Deployment** (Planned):
-- Frontend: AWS S3 + CloudFront
-- Backend: AWS EC2/ECS
-- Models: AWS for GPU inference
+**Deployment:**
+- Docker + Docker Compose
+- AWS EC2/ECS/SageMaker (see `AWS_DEPLOYMENT.md`)
+
+## GPU Support
+
+Models auto-detect CUDA availability. For GPU inference:
+- Local: Install PyTorch with CUDA support
+- AWS: Use g4dn.xlarge or similar GPU instances
 
 ## Next Steps
 
-1. Fine-tune SBI and DistilDIRE models
-2. Deploy models to AWS
-3. Implement weighted ensemble for final predictions
-4. Add result visualization (heatmaps, artifacts highlighting)
-5. Production deployment with proper CORS configuration
+1. Download and deploy model weight files
+2. Add result visualization (heatmaps, artifact highlighting)
+3. Production deployment with proper CORS configuration
+4. Performance optimization and caching

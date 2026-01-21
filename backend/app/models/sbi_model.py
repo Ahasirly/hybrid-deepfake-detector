@@ -47,7 +47,11 @@ class SBIModel:
 
         # Load checkpoint
         checkpoint = torch.load(checkpoint_path, map_location=self.device)
-        self.model.load_state_dict(checkpoint)
+        # Handle both direct state_dict and full checkpoint formats
+        if isinstance(checkpoint, dict) and 'model_state_dict' in checkpoint:
+            self.model.load_state_dict(checkpoint['model_state_dict'])
+        else:
+            self.model.load_state_dict(checkpoint)
 
         # Move to device and set to eval mode
         self.model = self.model.to(self.device)

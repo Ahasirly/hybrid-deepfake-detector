@@ -41,10 +41,10 @@ export default function ResultDisplay({ result }) {
           )}
         </div>
         <h2 className={`text-3xl font-bold ${isFake ? 'text-red-600' : 'text-green-600'}`}>
-          {isFake ? 'Deepfake Detected' : 'Authentic Image'}
+          {isFake ? 'Deepfake Detected' : 'Real Image'}
         </h2>
         <p className="text-gray-600 mt-2 text-lg">
-          Confidence: <span className="font-semibold">{confidence}%</span>
+          Deepfake Rate: <span className="font-semibold">{confidence}%</span>
         </p>
       </div>
 
@@ -79,14 +79,20 @@ export default function ResultDisplay({ result }) {
 }
 
 function ModelCard({ name, isFake, confidence }) {
+  const confidencePercent = (confidence * 100).toFixed(1)
+  const isHighConfidence = confidencePercent >= 60
+
   return (
     <div className="bg-white rounded-lg p-4 border-2 border-gray-300">
       <h3 className="font-semibold text-black mb-2">{name}</h3>
       <div className={`text-sm font-medium ${isFake ? 'text-red-600' : 'text-green-600'}`}>
-        {isFake ? 'Fake' : 'Authentic'}
+        {isFake ? 'FAKE' : 'REAL'}
       </div>
       <div className="text-sm text-gray-700 mt-1 font-medium">
-        {(confidence * 100).toFixed(1)}%
+        Deepfake Rate: 
+        <span className={`font-bold ${isHighConfidence ? 'text-red-600' : 'text-green-600'}`}>
+          {confidencePercent}%
+        </span>
       </div>
     </div>
   )
