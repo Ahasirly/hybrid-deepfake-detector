@@ -8,6 +8,12 @@ Two categories of real-world deepfakes are targeted:
 
 GPT-5.4 Vision is included as a **comparative reference** using zero-shot prompting, not as part of the detection verdict.
 
+## Live Demo
+
+Try it directly on Hugging Face Spaces — no setup required:
+
+**[Launch Demo](https://huggingface.co/spaces/ahasirly/Accessible-Deepfake-Detection-Hybrid-Apporach)**
+
 ## Project Status
 
 ### Implemented
